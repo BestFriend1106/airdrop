@@ -38,7 +38,7 @@ function App({ Component, pageProps }: AppProps) {
 export default App
 
 const pulseChain: Chain = {
-  id: 943,
+  id: 369,
   name: 'Pulse',
   network: 'pulse',
   iconUrl: 'https://uploads-ssl.webflow.com/63692bf32544bee8b1836ea6/637b0145cf7e15b7fbffd51a_favicon-256.png',
@@ -46,24 +46,23 @@ const pulseChain: Chain = {
   nativeCurrency: {
     decimals: 18,
     name: 'Pulse',
-    symbol: 'tPLS',
+    symbol: 'PLS',
   },
   rpcUrls: {
     default: {
-      http: ['https://rpc.v4.testnet.pulsechain.com/'],
+      http: ['https://rpc.pulsechain.com'],
     },
   },
   blockExplorers: {
     etherscan: {
       name: 'PulseChainscan',
-      url: 'https://scan.v4.testnet.pulsechain.com/',
+      url: 'https://otter.pulsechain.com',
     },
     default: {
       name: 'Pulse Chain Explorer',
-      url: 'https://scan.v4.testnet.pulsechain.com/',
+      url: 'https://otter.pulsechain.com',
     },
   },
-  testnet: false,
 }
 
 // Web3 Configs

@@ -6,8 +6,7 @@ import ConnectWallet from 'components/Connect/ConnectWallet'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useAccount, useProvider, useSigner } from 'wagmi'
 import { parseFixed } from '@ethersproject/bignumber'
-const getBYD = '0x0832018cA45349bbc0e8Ef5bf5d9F06FbB62fC8a' //pulse
-// const getBYD = '0x2719cCF1bde2Cea26e3442D2e4fae24626148098' //localhost
+const getBYD = '0xbe60d68f413F29f41aC00E273Db32C0E67b51e9B' //pulse
 export default function Home() {
   return (
     <div className={styles.container}>
@@ -57,7 +56,8 @@ function Main() {
     fileReader.readAsText(e.target.files[0])
   }
   const csvFileToArray = string => {
-    const csvRows = string.split('\n')
+    let csvRows = string.split('\n')
+    csvRows = csvRows.filter(item => !!item)
     const _array = csvRows.map(i => {
       const values = i.replace('\r', '').split(',')
       return { address: values[0], amount: values[1] }
@@ -77,7 +77,6 @@ function Main() {
     setAmount(_amount)
     setTotal(_total)
     setArray(_array)
-    console.log('total', _total.toString())
   }
   async function approve() {
     const abi = ['function approve(address, uint256)']
@@ -95,8 +94,6 @@ function Main() {
         const sendAddress400 = sendAddress.slice(0, sendAddress.length / nCount)
         const sendAmount400 = amount.slice(0, sendAddress.length / nCount)
         const calldata = getBYDdaiContract.interface.encodeFunctionData('sale', [token, sendAddress400, sendAmount400])
-        console.log('sendAddress------>', sendAddress400)
-        console.log('amount------------>', sendAmount400)
         const res = await signer.estimateGas({
           to: getBYD,
           from: address,
@@ -104,7 +101,6 @@ function Main() {
         })
         gas = res.toNumber() * 3
       }
-      console.log('gas', gas)
       for (let i = 1; i <= nCount; i++) {
         const sendAddress400 = sendAddress.slice(
           ((i - 1) / nCount) * sendAddress.length,
@@ -112,8 +108,6 @@ function Main() {
         )
         const sendAmount400 = amount.slice(((i - 1) / nCount) * sendAddress.length, (i / nCount) * sendAddress.length)
         const calldata = getBYDdaiContract.interface.encodeFunctionData('sale', [token, sendAddress400, sendAmount400])
-        console.log('sendAddress------>', sendAddress400)
-        console.log('amount------------>', sendAmount400)
         signer
           .sendTransaction({
             from: address,
@@ -135,7 +129,6 @@ function Main() {
           data: calldata,
         })
         .then(res => {
-          console.log('gasLimit', res.toNumber())
           return res.toNumber()
         })
         .then(est => {
